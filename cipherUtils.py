@@ -3,6 +3,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from stegano import lsb
+import pyperclip
 import base64
 import os
 
@@ -41,7 +42,7 @@ def decrypt_password(key: bytes, encrypted_password: bytes) -> str:
     return decrypted_password.decode()
 
 # Encrypt the password using the main password and image
-def embed_encrypted_password_in_image(main_password: str, password_to_encrypt: str, image_path: str, output_path: str) -> None:
+def embed_encrypted_password_in_image(main_password: str, password_to_encrypt: str, image_path: str, output_folder: str) -> None:
     """
     Encrypts the provided password and embeds it in an image using steganography.
     """
@@ -52,10 +53,10 @@ def embed_encrypted_password_in_image(main_password: str, password_to_encrypt: s
     secret_image = lsb.hide(image_path, encrypted_password.decode())
     # Get the image name and extension
     image_name = os.path.basename(image_path)
-    secret_image.save(output_path + image_name)
+    secret_image.save(output_folder + image_name)
 
 # Decrypt the password using the main password and image
-def decrypt_password_with_image(main_password: str, encrypted_image_path: str) -> str:
+def decrypt_password_with_image(main_password: str, encrypted_image_path: str) -> None:
     """
     Decrypts an encrypted password hiding in an image.
     """
@@ -66,5 +67,5 @@ def decrypt_password_with_image(main_password: str, encrypted_image_path: str) -
     
     # Decrypt the password using the extracted key
     decrypted_password = decrypt_password(key, encrypted_password.encode())
-    return decrypted_password
-    
+    # Copy the decrypted password to the clipboard
+    pyperclip.copy(decrypted_password)
