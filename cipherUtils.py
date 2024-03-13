@@ -7,17 +7,16 @@ import pyperclip
 import base64
 import os
 
-def generate_key(main_password: str) -> bytes:
+def generate_key(main_password: str, salt: str = 'salt_', iterations: int = 100000) -> bytes:
     """
     Generates a key using the provided password string and salt.
     """
     password = main_password.encode()
-    salt = b'salt_'  # Change this to a unique salt value
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
         length=32,
-        salt=salt,
-        iterations=100000,
+        salt=salt.encode(),
+        iterations=iterations,
         backend=default_backend()
     )
     key = base64.urlsafe_b64encode(kdf.derive(password))
@@ -42,11 +41,11 @@ def decrypt_password(key: bytes, encrypted_password: bytes) -> str:
     return decrypted_password.decode()
 
 # Encrypt the password using the main password and image
-def embed_encrypted_password_in_image(main_password: str, password_to_encrypt: str, image_path: str, output_folder: str) -> None:
+def embed_encrypted_password_in_image(main_password: str, password_to_encrypt: str, image_path: str, output_folder: str, salt: str = 'salt_', iterations: int = 100000) -> None:
     """
     Encrypts the provided password and embeds it in an image using steganography.
     """
-    key = generate_key(main_password)
+    key = generate_key(main_password, salt=salt, iterations=iterations)
     encrypted_password = encrypt_password(key, password_to_encrypt)
 
     # Embed the key into the image using steganography
@@ -56,14 +55,14 @@ def embed_encrypted_password_in_image(main_password: str, password_to_encrypt: s
     secret_image.save(output_folder + image_name)
 
 # Decrypt the password using the main password and image
-def decrypt_password_with_image(main_password: str, encrypted_image_path: str) -> None:
+def decrypt_password_with_image(main_password: str, encrypted_image_path: str, salt: str = 'salt_', iterations: int = 100000) -> None:
     """
     Decrypts an encrypted password hiding in an image.
     """
     # Extract the encrypted password from the image using steganography
     encrypted_password = lsb.reveal(encrypted_image_path)
 
-    key = generate_key(main_password)
+    key = generate_key(main_password, salt=salt, iterations=iterations)
     
     # Decrypt the password using the extracted key
     decrypted_password = decrypt_password(key, encrypted_password.encode())
