@@ -7,11 +7,18 @@ import pyperclip
 import base64
 import os
 
-def generate_key(main_password: str, salt: str = 'salt_', iterations: int = 100000) -> bytes:
+def generate_key(master_password: str, salt: str = 'salt_', iterations: int = 100000) -> bytes:
     """
-    Generates a key using the provided password string and salt.
+    Generates a SHA256 encryption key using the given password, string, and salt using the provided amount of iterations.
+
+    Args:
+        master_password: The master paswword used to generate the encryption key passed as a string.
+        salt: A string value used to add randomness to the encryption process (ideally, each salt should be random and unique).
+        iterations: The number of iterations of the underlying pseudorandom function. A higher number of iterations increases the computational cost of deriving the key.
+    Returns:
+        A SHA256 encryption key.
     """
-    password = main_password.encode()
+    password = master_password.encode()
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
         length=32,
@@ -41,11 +48,11 @@ def decrypt_password(key: bytes, encrypted_password: bytes) -> str:
     return decrypted_password.decode()
 
 # Encrypt the password using the main password and image
-def embed_encrypted_password_in_image(main_password: str, password_to_encrypt: str, image_path: str, output_folder: str, salt: str = 'salt_', iterations: int = 100000) -> None:
+def embed_encrypted_password_in_image(master_password: str, password_to_encrypt: str, image_path: str, output_folder: str, salt: str = 'salt_', iterations: int = 100000) -> None:
     """
     Encrypts the provided password and embeds it in an image using steganography.
     """
-    key = generate_key(main_password, salt=salt, iterations=iterations)
+    key = generate_key(master_password, salt=salt, iterations=iterations)
     encrypted_password = encrypt_password(key, password_to_encrypt)
 
     # Embed the key into the image using steganography
@@ -55,14 +62,14 @@ def embed_encrypted_password_in_image(main_password: str, password_to_encrypt: s
     secret_image.save(output_folder + image_name)
 
 # Decrypt the password using the main password and image
-def decrypt_password_with_image(main_password: str, encrypted_image_path: str, salt: str = 'salt_', iterations: int = 100000) -> None:
+def decrypt_password_with_image(master_password: str, encrypted_image_path: str, salt: str = 'salt_', iterations: int = 100000) -> None:
     """
     Decrypts an encrypted password hiding in an image.
     """
     # Extract the encrypted password from the image using steganography
     encrypted_password = lsb.reveal(encrypted_image_path)
 
-    key = generate_key(main_password, salt=salt, iterations=iterations)
+    key = generate_key(master_password, salt=salt, iterations=iterations)
     
     # Decrypt the password using the extracted key
     decrypted_password = decrypt_password(key, encrypted_password.encode())
