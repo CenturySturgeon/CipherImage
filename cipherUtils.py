@@ -83,7 +83,7 @@ def embed_encrypted_password_in_image(master_password: str, password_to_encrypt:
     secret_image.save(image_path)
 
 # Decrypt the password using the main password and image
-def decrypt_password_with_image(master_password: str, encrypted_image_path: str, salt: str = 'salt_', iterations: int = 100000, copy_to_clipboard: bool = False) -> None:
+def decrypt_password_with_image(master_password: str, encrypted_image_path: str, salt: str = 'salt_', iterations: int = 100000, copy_to_clipboard: bool = False) -> None | str:
     """
     Encrypts the provided password and embeds it in an image using steganography.
     
@@ -109,4 +109,4 @@ def decrypt_password_with_image(master_password: str, encrypted_image_path: str,
         pyperclip.copy(decrypted_password)
     else:
         # Print the decrypted password to the terminal
-        print(decrypted_password)
+        return decrypted_password
