@@ -3,3 +3,5 @@
 *.jpeg
 *.svg
 images/
+__pycache__/
+.venv
