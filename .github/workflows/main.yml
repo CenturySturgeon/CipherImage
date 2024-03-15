@@ -21,17 +21,23 @@ jobs:
     - name: Install dependencies
       run: pip install -r requirements.txt pyinstaller
       
-    - name: Build executable
-      run: pyinstaller cipherCli.spec
-
     - name: Create artifact path
-      run: mkdir -p path/to/artifact
+      run: mkdir -p dist
     
-    - name: Save to artifact path
-      run: echo hello > path/to/artifact/world.txt
+    - name: Save txt file to artifact path
+      run: echo hello > dist/world.txt
+
+    - name: Build executable
+      run: pyinstaller --onefile --noconsole --icon=cipherImage.ico --distpath dist cipherCli.py
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: my-artifact
-        path: path/to/artifact/world.txt
+        path: dist/world.txt
+
+    - name: Upload exe artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: executable
+        path: dist/cipherCli.exe
