@@ -34,5 +34,13 @@ def decrypt_image(master_password, image, salt, iterations, copy_to_clipboard):
     else:
         click.echo(f'Retrieved: {decrypted_password}')
 
+@cli.command()
+# Check input function arguments
+@click.option('--input', prompt=True, hide_input=True, default='', type=click.STRING, help='The input to help you see what you\'ve written into it.')
+
+def check_input(input):
+    """Simple function to review what it is you\'re writing. Especially useful when your passwords have special characters."""
+    click.echo(f'You input: {input}')
+
 if __name__ == '__main__':
     cli()
