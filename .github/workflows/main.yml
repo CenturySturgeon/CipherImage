@@ -7,7 +7,7 @@ on:
     paths:
       - 'cipherCli.py'
       - 'cipherUtils.py'
-      - 'cipherCli.spec'
+      - 'cipherImage.spec'
 
 jobs:
   build:
@@ -26,10 +26,10 @@ jobs:
       run: pip install -r requirements.txt pyinstaller
 
     - name: Build executable
-      run: pyinstaller cipherCli.spec
+      run: pyinstaller cipherImage.spec
 
     - name: Upload exe artifact
       uses: actions/upload-artifact@v4
       with:
         name: cipherImage-Package
-        path: dist/cipherCli.exe
+        path: dist/cipherImage.exe
