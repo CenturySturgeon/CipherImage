@@ -1,5 +1,8 @@
 # CipherImage
 
+![Diagram](resources/cipherImage.svg)
+
+
 CipherImage is a command-line interface (CLI) utility for encrypting passwords and concealing them within images using steganography.
 
 ## Usage
