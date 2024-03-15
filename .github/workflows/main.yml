@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     
     steps:
     - name: Checkout code
@@ -20,24 +20,12 @@ jobs:
         
     - name: Install dependencies
       run: pip install -r requirements.txt pyinstaller
-      
-    - name: Create artifact path
-      run: mkdir -p dist
 
     - name: Build executable
-      run: pyinstaller --onefile --noconsole --icon=cipherImage.ico --distpath dist cipherCli.py
-
-    - name: Save txt file to artifact path
-      run: ls -F dist/ > dist/world.txt
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: my-artifact
-        path: dist/world.txt
+      run: pyinstaller cipherCli.spec
 
     - name: Upload exe artifact
       uses: actions/upload-artifact@v4
       with:
-        name: executable
-        path: dist/cipherCli
+        name: cipherCli
+        path: dist/cipherCli.exe
