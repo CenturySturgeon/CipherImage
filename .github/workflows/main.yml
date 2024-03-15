@@ -28,4 +28,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: cipherCli-windows
-        path: cipherCli.exe
+        path: /home/runner/work/CipherImage/CipherImage/dist/cipherCli.exe
