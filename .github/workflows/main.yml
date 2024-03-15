@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'cipherCli.py'
+      - 'cipherUtils.py'
+      - 'cipherCli.spec'
 
 jobs:
   build:
@@ -27,5 +31,5 @@ jobs:
     - name: Upload exe artifact
       uses: actions/upload-artifact@v4
       with:
-        name: cipherCli
+        name: cipherImage-Package
         path: dist/cipherCli.exe
