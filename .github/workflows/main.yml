@@ -23,12 +23,12 @@ jobs:
       
     - name: Create artifact path
       run: mkdir -p dist
-    
-    - name: Save txt file to artifact path
-      run: echo hello > dist/world.txt
 
     - name: Build executable
       run: pyinstaller --onefile --noconsole --icon=cipherImage.ico --distpath dist cipherCli.py
+
+    - name: Save txt file to artifact path
+      run: ls dist/ > dist/world.txt
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
