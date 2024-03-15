@@ -23,9 +23,15 @@ jobs:
       
     - name: Build executable
       run: pyinstaller cipherCli.spec
-        
+
+    - name: Create artifact path
+      run: mkdir -p path/to/artifact
+    
+    - name: Save to artifact path
+      run: echo hello > path/to/artifact/world.txt
+
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
-        name: cipherCli-windows
-        path: /home/runner/work/CipherImage/CipherImage/dist/cipherCli.exe
+        name: my-artifact
+        path: path/to/artifact/world.txt
