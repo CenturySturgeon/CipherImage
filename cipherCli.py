@@ -20,7 +20,7 @@ def encrypt_image(master_password, password, image, salt, iterations):
 
 @cli.command()
 # Decrypt password in image function arguments
-@click.option('--master_password', prompt='Your master password', hide_input=True, confirmation_prompt=True, help='Master password used to decrypt the password.')
+@click.option('--master_password', prompt='Your master password', hide_input=True, help='Master password used to decrypt the password.')
 @click.option('--image', prompt='Path of the image', help='Path of the image hiding the password.')
 @click.option('--salt', prompt=True, default='salt_', hide_input=True, help='The value used to add randomness to the encryption process (the same used when encrypting the password).')
 @click.option('--iterations', prompt=True, default=100000, hide_input=True, help='The number of iterations to derive the secret key (the same used when encrypting the password).')
