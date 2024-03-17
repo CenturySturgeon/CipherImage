@@ -2,10 +2,10 @@ from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from stegano import lsb
+from stegano import lsb, exifHeader
 import pyperclip
 import base64
-import os
+import pathlib
 
 def generate_key(master_password: str, salt: str = 'salt_', iterations: int = 100000) -> bytes:
     """
@@ -28,6 +28,25 @@ def generate_key(master_password: str, salt: str = 'salt_', iterations: int = 10
     )
     key = base64.urlsafe_b64encode(kdf.derive(password))
     return key
+
+def embed_in_png(image_path: str, encrypted_password: bytes) -> None:
+    """Embeds the provided password in the given png image."""
+    # Embed the key into the image using steganography
+    secret_image = lsb.hide(image_path, encrypted_password.decode())
+    # Save the image holding the password
+    secret_image.save(image_path)
+
+def decrypt_png(image_path: str) -> str:
+    "Retrieves an encrypted password inside the provided jpg image."
+    return lsb.reveal(image_path)
+
+def embed_in_jpg(image_path: str, encrypted_password: bytes) -> None:
+    """Embeds the provided password in the given jpg image."""
+    secret = exifHeader.hide(image_path, image_path, secret_message=encrypted_password.decode())
+    
+def decrypt_jpg(image_path: str) -> str:
+    "Retrieves an encrypted password inside the provided jpg image."
+    return exifHeader.reveal(image_path).decode()
 
 # Encrypt a password using the generated key
 def encrypt_password(key: bytes, password: str) -> bytes:
@@ -77,10 +96,11 @@ def embed_encrypted_password_in_image(master_password: str, password_to_encrypt:
     key = generate_key(master_password, salt=salt, iterations=iterations)
     encrypted_password = encrypt_password(key, password_to_encrypt)
 
-    # Embed the key into the image using steganography
-    secret_image = lsb.hide(image_path, encrypted_password.decode())
-    # Save the image holding the password
-    secret_image.save(image_path)
+    # Embed the encrypted password in the image
+    if pathlib.Path(image_path).suffix == '.png':
+        embed_in_png(image_path, encrypted_password)
+    else:
+        embed_in_jpg(image_path, encrypted_password)
 
 # Decrypt the password using the main password and image
 def decrypt_password_with_image(master_password: str, encrypted_image_path: str, salt: str = 'salt_', iterations: int = 100000, copy_to_clipboard: bool = False) -> None | str:
@@ -98,7 +118,10 @@ def decrypt_password_with_image(master_password: str, encrypted_image_path: str,
         None. The encrypted password will be extracted from the image, decrypted, and copied to the clipboard.
     """
     # Extract the encrypted password from the image using steganography
-    encrypted_password = lsb.reveal(encrypted_image_path)
+    if pathlib.Path(encrypted_image_path).suffix == '.png':
+        encrypted_password = decrypt_png(encrypted_image_path)
+    else:
+        encrypted_password = decrypt_jpg(encrypted_image_path)
 
     key = generate_key(master_password, salt=salt, iterations=iterations)
     
