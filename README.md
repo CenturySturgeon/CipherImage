@@ -58,3 +58,9 @@ With this, you should have access to the same functions as if the executable was
 Alternatively, you can make use of CipherImage without an executable file. Just follow the "Build from Source" steps 1 through 7 first in order for this to work. After that, you can access the utilities functions by opening a terminal on the same folder where the 'cipherCli.py' file is and typing ```pythonX.X cipherCli.py``` (please note the 'X.X' in 'pythonX.X' stands for your python version, and you may not need to specify it in your system), after which you'll have access to CipherImage's functions. 
 
 ## CipherImage Usage Instructions
+
+CipherImage comes with three simple and easy to use commands:
+
+1. encrypt-image: Encrypts a password and hides it inside an image using steganography.
+2. decrypt-image: Retrieves an encrypted password hiden inside an image and decrypts it. It allows you to specify if the password is displayed in the terminal or copied to your clipboard by setting ```--copy_to_clipboard=true```.
+3. check-input: If for some reason you were to be experimenting issues when introducing any value, you can try using this command to see what is it that CipherImage is receiving as an input.
