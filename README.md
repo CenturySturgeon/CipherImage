@@ -46,11 +46,12 @@ If you prefer to build the application from source:
 
 ### Executable In System's Path Variable
 
-If you followed the steps to add the executable's parent folder to your system's path variable you should be able to access the utility by typing ```call cipherImage.exe```.
+If you followed the steps to add the executable's parent folder to your system's path variable you should be able to access the utility by typing ```cipherImage``` (or the name of the .exe file if you changed it) on your terminal.
 
 ### Executable Not In System's Path Variable
 
-If you don't want to, or can't, get the executable file on the system's path variable, you can still use CipherImage by calling it. On Windows, just open a terminal on the folder where the .exe file is (you can do this simply by navigating to the path on the file explorer and typing ```cmd``` on the path bar), type ```call cipherImage.exe``` and hit ENTER. With this, you should have access to the same functions as if the executable was in the system's path variable.
+If you don't want to, or can't, get the executable file on the system's path variable, you can still use CipherImage by calling it. On Windows, just open a terminal on the folder where the .exe file is (you can do this simply by navigating to the path on the file explorer and typing ```cmd``` on the path bar), type ```call cipherImage.exe``` and hit ENTER.
+With this, you should have access to the same functions as if the executable was in the system's path variable.
 
 ### Python Package
 
