@@ -9,8 +9,10 @@ on:
       - 'cipherUtils.py'
       - 'windows.spec'
       - 'linux.spec'
+      - 'macos.spec'
 
 jobs:
+
   build_windows:
     runs-on: windows-latest
     
@@ -34,6 +36,7 @@ jobs:
       with:
         name: cipherImage-Windows
         path: dist/cipherImage.exe
+
   build_linux:
     runs-on: ubuntu-latest
     
@@ -56,4 +59,28 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: cipherImage-Linux
+        path: dist/cipherImage
+
+  build_mac:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: pip install -r requirements.txt pyinstaller
+
+    - name: Build executable
+      run: pyinstaller macos.spec
+
+    - name: Upload exe artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: cipherImage-MacOS
         path: dist/cipherImage
