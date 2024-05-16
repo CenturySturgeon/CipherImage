@@ -10,6 +10,7 @@ on:
       - 'windows.spec'
       - 'linux.spec'
       - 'macos.spec'
+  workflow_dispatch:
 
 jobs:
 
